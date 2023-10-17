@@ -1,0 +1,19 @@
+{
+    "name": "ww/s3-mass-downloader",
+    "type": "library",
+    "license": "proprietary",
+    "autoload": {
+        "psr-4": {
+            "Ww\\S3MassDownloader\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Marcin Kasprzyk",
+            "email": "marcin.kasprzyk@gmail.com"
+        }
+    ],
+    "require": {
+        "aws/aws-sdk-php": "^3.283"
+    }
+}
