@@ -46,7 +46,7 @@ if (empty($files)) {
 
 try {
     $streamingClient = new \Ww\S3MassDownloader\StreamingClient($s3Client, AWS_BUCKET);
-    $streamingClient->getZippedFiles($files);
+    $streamingClient->downloadZippedFiles($files);
 } catch (\Exception $e) {
     echo $e->getMessage() . PHP_EOL;
 }

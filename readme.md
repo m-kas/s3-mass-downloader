@@ -2,7 +2,7 @@
 
 This library allows you to download the provided list of files from S3 storage into a single zipped file.
 
-**What is important, the downloaded files are not stored on the disk, but are streamed directly to the zip file and downloaded to the user.**
+**What is important, the downloaded files are not stored on the disk on the server, but are streamed directly to the zip file to be downloaded by the user's browser.**
 
 # Prerequisites
 
