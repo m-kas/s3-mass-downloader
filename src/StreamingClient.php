@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Ww\S3MassDownloader;
 
@@ -16,16 +16,24 @@ class StreamingClient
         );
     }
 
+    /**
+     * @param array $filesList
+     * @return int
+     * @throws Exceptions\EmptyFileListException
+     * @throws \ZipStream\Exception\FileNotFoundException
+     * @throws \ZipStream\Exception\FileNotReadableException
+     * @throws \ZipStream\Exception\OverflowException
+     */
     public function getZippedFiles(array $filesList)
     {
         if (empty($filesList)) {
-            return;
+            throw new Exceptions\EmptyFileListException('File list cannot be empty');
         }
 
         foreach ($filesList as $filePath) {
-            $this->zipStream->addFileFromPath(
+            $this->zipStream->addFile(
                 fileName: basename($filePath),
-                path: $filePath
+                data: file_get_contents($filePath)
             );
         }
 
