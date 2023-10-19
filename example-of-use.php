@@ -3,7 +3,7 @@
 require_once __DIR__ . '/vendor/autoload.php';
 
 // configuration and credentials
-// take them from the .env file, or some other config, depending on your setup or app
+// take the variables from the .env file, or some other config, depending on your setup or app
 const AWS_DEFAULT_REGION = '__REGION__';
 const AWS_BUCKET = '__BUCKET_NAME__';
 const AWS_ACCESS_KEY_ID = '__ACCESS_KEY_ID__';
@@ -21,9 +21,7 @@ $s3Client = new Aws\S3\S3Client([
 
 $files = [];
 
-// just an example: take first 10 files from the bucket
 try {
-    // List objects in a bucket
     $result = $s3Client->listObjectsV2([
         'Bucket' => AWS_BUCKET,
     ]);
@@ -39,6 +37,11 @@ try {
     }
 } catch (\Exception $e) {
     echo $e->getMessage() . PHP_EOL;
+}
+
+if (empty($files)) {
+    echo 'No files found' . PHP_EOL;
+    exit(1);
 }
 
 try {

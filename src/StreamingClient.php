@@ -30,7 +30,7 @@ class StreamingClient
      * @throws Exceptions\EmptyFileListException
      * @throws \ZipStream\Exception\OverflowException
      */
-    public function getZippedFiles(array $filesList)
+    public function getZippedFiles(array $filesList): int
     {
         if (empty($filesList)) {
             throw new Exceptions\EmptyFileListException('File list cannot be empty');
