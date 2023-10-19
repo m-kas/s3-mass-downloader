@@ -14,6 +14,8 @@
         }
     ],
     "require": {
-        "aws/aws-sdk-php": "^3.283"
+        "php": ">=8.2",
+        "ext-zip": "*",
+        "maennchen/zipstream-php": "^3.1"
     }
 }
