@@ -7,6 +7,8 @@ use ZipStream\ZipStream;
 
 class StreamingClient
 {
+    private const DATE_FORMAT = 'Y-m-d_H-i-s';
+
     private const DEFAULT_FILENAME_PREFIX = 'project_';
 
     private S3Client $s3Client;
@@ -14,16 +16,13 @@ class StreamingClient
     private ZipStream $zipStream;
     private string $zipFileName;
 
-    public function __construct(S3Client $s3Client, string $bucketName, string $filename = '')
+    public function __construct(S3Client $s3Client, string $bucketName, string $zipFileName = '')
     {
         $this->s3Client = $s3Client;
         $this->s3Client->registerStreamWrapper();
         $this->bucketName = $bucketName;
-        $this->zipFileName = $this->getDefaultFilename($filename);
-
-        $this->zipStream = new ZipStream(
-            outputName: $this->zipFileName
-        );
+        $this->zipFileName = $this->getDefaultFilename($zipFileName);
+        $this->zipStream = new ZipStream(outputName: $this->zipFileName);
     }
 
     /**
@@ -59,15 +58,28 @@ class StreamingClient
         return $this->zipFileName;
     }
 
+    public function setBucketName(string $bucketName): void
+    {
+        $this->bucketName = $bucketName;
+    }
+
+    public function setS3Client(S3Client $s3Client): void
+    {
+        $this->s3Client = $s3Client;
+    }
+
+    public function setZipFileName(string $zipFileName): void
+    {
+        $this->zipFileName = $zipFileName;
+    }
+
     private function getDefaultFilename(string $filename = ''): string
     {
         if (!empty($filename)) {
             return $filename;
         }
 
-        $currentDateAndTime = date('Y-m-d_H-i-s');
-
-        return self::DEFAULT_FILENAME_PREFIX . $currentDateAndTime . '.zip';
+        return self::DEFAULT_FILENAME_PREFIX . date(self::DATE_FORMAT) . '.zip';
     }
 
     private function validateFilesList(array $filesList)
