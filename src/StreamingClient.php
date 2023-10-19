@@ -2,15 +2,22 @@
 
 namespace Ww\S3MassDownloader;
 
+use Aws\S3\S3Client;
 use ZipStream\ZipStream;
 
 class StreamingClient
 {
     private const DEFAULT_FILENAME_PREFIX = 'project_';
+
+    private S3Client $s3Client;
     private ZipStream $zipStream;
 
-    public function __construct(string $filename = '')
+
+    public function __construct(S3Client $s3Client, string $filename = '')
     {
+        $this->s3Client = $s3Client;
+        $this->s3Client->registerStreamWrapper();
+
         $this->zipStream = new ZipStream(
             outputName: $this->getFilename($filename)
         );
@@ -20,8 +27,6 @@ class StreamingClient
      * @param array $filesList
      * @return int
      * @throws Exceptions\EmptyFileListException
-     * @throws \ZipStream\Exception\FileNotFoundException
-     * @throws \ZipStream\Exception\FileNotReadableException
      * @throws \ZipStream\Exception\OverflowException
      */
     public function getZippedFiles(array $filesList)
@@ -31,16 +36,21 @@ class StreamingClient
         }
 
         foreach ($filesList as $filePath) {
-            $this->zipStream->addFile(
+            $this->zipStream->addFileFromPsr7Stream(
                 fileName: basename($filePath),
-                data: file_get_contents($filePath)
+                stream: $this->s3Client->getObject(
+                    [
+                        'Bucket' => 'files.belle-ai.com',
+                        'Key' => $filePath,
+                    ]
+                )['Body']
             );
         }
 
         return $this->zipStream->finish();
     }
 
-    private function getFilename(string $filename = ''): string
+    protected function getFilename(string $filename = ''): string
     {
         if (!empty($filename)) {
             return $filename;
