@@ -12,7 +12,6 @@ class StreamingClient
     private S3Client $s3Client;
     private ZipStream $zipStream;
 
-
     public function __construct(S3Client $s3Client, string $filename = '')
     {
         $this->s3Client = $s3Client;
@@ -40,7 +39,7 @@ class StreamingClient
                 fileName: basename($filePath),
                 stream: $this->s3Client->getObject(
                     [
-                        'Bucket' => 'files.belle-ai.com',
+                        'Bucket' => '__BUCKET_NAME__',
                         'Key' => $filePath,
                     ]
                 )['Body']
