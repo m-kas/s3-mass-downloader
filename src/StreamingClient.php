@@ -10,12 +10,14 @@ class StreamingClient
     private const DEFAULT_FILENAME_PREFIX = 'project_';
 
     private S3Client $s3Client;
+    private string $bucketName;
     private ZipStream $zipStream;
 
-    public function __construct(S3Client $s3Client, string $filename = '')
+    public function __construct(S3Client $s3Client, string $bucketName, string $filename = '')
     {
         $this->s3Client = $s3Client;
         $this->s3Client->registerStreamWrapper();
+        $this->bucketName = $bucketName;
 
         $this->zipStream = new ZipStream(
             outputName: $this->getFilename($filename)
@@ -35,14 +37,11 @@ class StreamingClient
         }
 
         foreach ($filesList as $filePath) {
+            $s3Object = $this->s3Client->getObject(['Bucket' => $this->bucketName, 'Key' => $filePath]);
+
             $this->zipStream->addFileFromPsr7Stream(
                 fileName: basename($filePath),
-                stream: $this->s3Client->getObject(
-                    [
-                        'Bucket' => '__BUCKET_NAME__',
-                        'Key' => $filePath,
-                    ]
-                )['Body']
+                stream: $s3Object['Body'],
             );
         }
 
