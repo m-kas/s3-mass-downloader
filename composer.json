@@ -2,6 +2,14 @@
     "name": "s3-mass-downloader/s3-mass-downloader",
     "type": "library",
     "license": "mit",
+    "description": "Solution for bulk files streaming from S3 to ZIP archive",
+    "keywords": [
+        "s3",
+        "aws",
+        "downloader",
+        "zip",
+        "stream"
+    ],
     "autoload": {
         "psr-4": {
             "S3MassDownloader\\S3MassDownloader\\": "src/"
