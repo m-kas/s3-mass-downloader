@@ -4,6 +4,6 @@ namespace Ww\S3MassDownloader\Exceptions;
 
 use Exception;
 
-class EmptyFileListException extends Exception
+class EmptyArgumentException extends Exception
 {
 }

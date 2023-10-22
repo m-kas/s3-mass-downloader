@@ -8,7 +8,6 @@ use ZipStream\ZipStream;
 class StreamingClient
 {
     private const DATE_FORMAT = 'Y-m-d_H-i-s';
-
     private const DEFAULT_FILENAME_PREFIX = 'project_';
 
     private S3Client $s3Client;
@@ -16,8 +15,16 @@ class StreamingClient
     private ZipStream $zipStream;
     private string $zipFileName;
 
+    /**
+     * @param S3Client $s3Client
+     * @param string $bucketName
+     * @param string $zipFileName
+     * @throws Exceptions\EmptyArgumentException
+     */
     public function __construct(S3Client $s3Client, string $bucketName, string $zipFileName = '')
     {
+        $this->validateNonEmptyArgument($bucketName, 'Bucket name cannot be empty');
+
         $this->s3Client = $s3Client;
         $this->s3Client->registerStreamWrapper();
         $this->bucketName = $bucketName;
@@ -26,14 +33,14 @@ class StreamingClient
     }
 
     /**
-     * @param array $filesList
-     * @return int
-     * @throws Exceptions\EmptyFileListException
+     * @param string[] $filesList
+     * @return int Number of bytes
+     * @throws Exceptions\EmptyArgumentException
      * @throws \ZipStream\Exception\OverflowException
      */
     public function downloadZippedFiles(array $filesList): int
     {
-        $this->validateFilesList($filesList);
+        $this->validateNonEmptyArgument($filesList, 'File list cannot be empty');
 
         foreach ($filesList as $filePath) {
             $s3Object = $this->s3Client->getObject(['Bucket' => $this->bucketName, 'Key' => $filePath]);
@@ -58,18 +65,34 @@ class StreamingClient
         return $this->zipFileName;
     }
 
+    /**
+     * @param string $bucketName
+     * @return void
+     * @throws Exceptions\EmptyArgumentException
+     */
     public function setBucketName(string $bucketName): void
     {
+        $this->validateNonEmptyArgument($bucketName, 'Bucket name cannot be empty');
         $this->bucketName = $bucketName;
     }
 
+    /**
+     * @param S3Client $s3Client
+     * @return void
+     */
     public function setS3Client(S3Client $s3Client): void
     {
         $this->s3Client = $s3Client;
     }
 
+    /**
+     * @param string $zipFileName
+     * @return void
+     * @throws Exceptions\EmptyArgumentException
+     */
     public function setZipFileName(string $zipFileName): void
     {
+        $this->validateNonEmptyArgument($zipFileName, 'Zip file name cannot be empty');
         $this->zipFileName = $zipFileName;
     }
 
@@ -82,10 +105,10 @@ class StreamingClient
         return self::DEFAULT_FILENAME_PREFIX . date(self::DATE_FORMAT) . '.zip';
     }
 
-    private function validateFilesList(array $filesList)
+    private function validateNonEmptyArgument($argument, string $message): void
     {
-        if (empty($filesList)) {
-            throw new Exceptions\EmptyFileListException('File list cannot be empty');
+        if (empty($argument)) {
+            throw new Exceptions\EmptyArgumentException($message);
         }
     }
 
