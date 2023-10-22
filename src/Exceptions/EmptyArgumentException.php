@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Ww\S3MassDownloader\Exceptions;
+namespace S3MassDownloader\S3MassDownloader\Exceptions;
 
 use Exception;
 

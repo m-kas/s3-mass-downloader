@@ -22,6 +22,7 @@ $s3Client = new Aws\S3\S3Client([
 
 $files = [];
 
+// just for an example, take the first 10 files from the bucket
 try {
     $result = $s3Client->listObjectsV2([
         'Bucket' => AWS_BUCKET,
@@ -49,10 +50,12 @@ try {
     // create new StreamingClient instance
     // first argument is the S3 client instance
     // second argument is the bucket name
-    // third argument is optional, and is the name of the zip file
-    $streamingClient = new \Ww\S3MassDownloader\StreamingClient($s3Client, AWS_BUCKET, 'custom.zip');
+    // third argument is optional, and is the name of the resulting zip file
+    // if third argument is not provided, the default filename of resulting zip is `project_{datetime}.zip`
+    $streamingClient = new \S3MassDownloader\S3MassDownloader\StreamingClient($s3Client, AWS_BUCKET, 'result.zip');
 
     // download the files
+    // as a parameter please provide an array with the list of absolute files path that you want to be downloaded
     // this method returns the number of bytes written to the zip file
     $streamingClient->downloadZippedFiles($files);
 } catch (\Exception $e) {

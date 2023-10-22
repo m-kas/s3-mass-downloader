@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Ww\S3MassDownloader;
+namespace S3MassDownloader\S3MassDownloader;
 
 use Aws\S3\S3Client;
 use ZipStream\ZipStream;

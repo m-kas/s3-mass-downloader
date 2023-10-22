@@ -13,6 +13,5 @@ This library allows you to download the provided list of files from S3 storage i
 
 # Installation
 
-- clone the source code from the repository
-- install dependencies with `composer install`
+- install library with composer: `composer require s3-mass-downloader/s3-mass-downloader`
 - use the library in your code (see the `example-of-use.php` file)

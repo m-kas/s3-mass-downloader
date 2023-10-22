@@ -1,10 +1,10 @@
 {
-    "name": "ww/s3-mass-downloader",
+    "name": "s3-mass-downloader/s3-mass-downloader",
     "type": "library",
-    "license": "proprietary",
+    "license": "mit",
     "autoload": {
         "psr-4": {
-            "Ww\\S3MassDownloader\\": "src/"
+            "S3MassDownloader\\S3MassDownloader\\": "src/"
         }
     },
     "authors": [
