@@ -6,7 +6,7 @@ This library allows you to download the provided list of files from S3 storage i
 
 # Prerequisites
 
-- [PHP 8.2](https://www.php.net/downloads.php) or higher,
+- [PHP 7.4](https://www.php.net/downloads.php) or higher,
 - [PHP Zip](https://www.php.net/manual/en/zip.installation.php) extension,
 - [PHP AWS SDK 3.0](https://docs.aws.amazon.com/sdk-for-php/v3/developer-guide/getting-started_installation.html) or higher (installed as a [composer](https://getcomposer.org/) dependency),
 - [AWS S3 bucket](https://docs.aws.amazon.com/AmazonS3/latest/userguide/creating-bucket.html) with files to download.

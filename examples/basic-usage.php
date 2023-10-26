@@ -56,7 +56,6 @@ try {
 
     // download the files
     // as a parameter please provide an array with the list of absolute files path that you want to be downloaded
-    // this method returns the number of bytes written to the zip file
     $streamingClient->downloadZippedFiles($files);
 } catch (\Exception $e) {
     echo $e->getMessage() . PHP_EOL;

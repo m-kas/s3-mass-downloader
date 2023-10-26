@@ -3,6 +3,7 @@
 namespace S3MassDownloader\S3MassDownloader;
 
 use Aws\S3\S3Client;
+use ZipStream\Option\Archive;
 use ZipStream\ZipStream;
 
 class StreamingClient
@@ -29,12 +30,12 @@ class StreamingClient
         $this->s3Client->registerStreamWrapper();
         $this->bucketName = $bucketName;
         $this->zipFileName = $this->getDefaultFilename($zipFileName);
-        $this->zipStream = new ZipStream(outputName: $this->zipFileName);
+        $this->zipStream = new ZipStream($this->zipFileName, $this->getZipArchiveOptions());
     }
 
     /**
      * @param string[] $filesList
-     * @return int Number of bytes
+     * @return void
      * @throws Exceptions\EmptyArgumentException
      * @throws \ZipStream\Exception\OverflowException
      */
@@ -114,6 +115,14 @@ class StreamingClient
 
     private function addFileToZipStream(string $fileName, $stream): void
     {
-        $this->zipStream->addFileFromPsr7Stream(fileName: $fileName, stream: $stream);
+        $this->zipStream->addFileFromPsr7Stream($fileName, $stream);
+    }
+
+    private function getZipArchiveOptions()
+    {
+        $options = new Archive();
+        $options->setSendHttpHeaders(true);
+
+        return $options;
     }
 }
